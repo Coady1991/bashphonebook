@@ -1,0 +1,64 @@
+#!/bin/bash
+# Author: Niall Coady
+# Date: Wed April 26th 2017
+# Description: This script allows the user to search
+# for a cutomer and remove them from the Customer Details file.
+
+# Clears the screen of the Main Menu
+clear
+echo "The Remove Menu is loading...."
+sleep 2
+clear
+exit=0
+# Controls the Search Menu loop until the user hits 0 to exit.
+while [ $exit -ne 1 ]
+  do
+    echo "======================================="
+    echo " Remove Menu, please choose an option!"
+    echo "======================================="
+    echo "1. Search for Customer"
+    echo "2. Delete Customer by index number"
+    echo "0. Exit"
+    echo -e "\n"
+    echo -e "Enter a number: \c"
+    read number
+      case "$number" in
+           # Prints out all entries in Customer Details
+        1) awk '{print NR, $0}' CustDetails
+           ;;
+           # Asks user which line they would like to delete.
+        2) echo "Which number line would you like to delete? "
+           read line
+           echo "Should line '$line' be deleted? "
+           echo -n "y/n: "
+           read answer
+           # Fixes case answer on y/n
+           fixanswer=`echo $answer | tr "A-Z" "a-z"`;
+
+           # If y was entered the values are passed to Customer details
+           if [ "$fixanswer" = "y" ]
+             then 
+               sed -i "${line}"d CustDetails
+               echo "Customer entry has been deleted"
+               sleep 4 # Pauses to give user a chance to read output.
+
+             # If n was entered the values are discarded
+             else [ "$fixanswer" = "n" ]
+               echo "Entry was not deleted"
+               sleep 4 #pauses to give user a chance to read output
+           fi
+           clear
+           ;;
+        0) echo "Exiting...." #Exits the menu and ends the program
+           sleep 2
+           clear
+           exit
+           ;;
+           # Catch for an invalid option enetered, asks user to try again
+        *) echo "Invalid option. Please choose again!"
+           sleep 2
+           clear
+           ;;
+     esac
+  done
+ 

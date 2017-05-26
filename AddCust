@@ -1,0 +1,106 @@
+#!/bin/bash
+# Author: Niall Coady
+# Date: Wed April 26th 2017
+# Description:This script adds a new customer to the Customer Details file.
+
+# Clears the screen of the Main Menu
+clear 
+echo "The Add Customer menu is loading....."
+sleep 2 
+clear
+echo "======================================="
+echo " Add a new Customer"
+echo "======================================="
+
+# Asks for the customer email address. Validated to contain an @ and a .
+echo -n  "Please enter customers E-mail Address: "
+read email
+# Controls the loop while the email entered is not valid
+while  [[ "$email" != ?*@*.?* ]]
+  do
+    echo  "This is not a valid email, please try again!"
+    echo  "Format ???@???.???"
+    echo -n "Please enter customers E-mail Address: "
+    read email
+  done
+
+
+# Asks for the customer name. Validated to accept letters and spaces only.
+echo -n  "Please enter customers Name: "
+read name
+# Controls the loop while the name entered is not valid.
+until [[ "$name" =~ ^[a-zA-Z]+$* ]]
+  do
+    echo "This is not a valid input, please enter letters only!"
+    echo -n "Please enter the customers Name: "
+    read name
+  done
+
+
+# Asks for the customer alias. Validated to accept letters only and no spaces.
+echo -n  "Please enter customers Alias: "
+read alias
+# Controls the loop while the alias entered is not valid.
+until [[ "$alias" =~ ^[a-zA-Z]+$ ]]
+  do
+    echo "This is not a valid input, please enter letters only and no spaces!"
+    echo -n "Please enter the customers Alias: "
+    read alias
+  done
+
+
+# Asks for the customers address. Validated to accept number, letters and spaces.
+echo -n  "Please enter customers Address: "
+read address
+# Controls the loop while the address entered is not valid.
+until [[ "$address" =~ ^[0-9a-zA-Z]+$* ]]
+  do
+    echo "This is not a valid input!"
+    echo -n "Please enter the customers Address: "
+    read address
+  done
+
+
+# Asks for the customers telephone number. Must contain 10 numbers (mobile)
+echo -n  "Please enter customers Telephone Number: "
+read telephone
+#Controls the loop while the number enetered does not contain 10 numbers
+while [[ "$telephone" != [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9] ]]
+  do
+    echo "This is not a valid number, please try again!"
+    echo "Please make sure it contains 10 numbers(mobile)."
+    echo -n "Please enter customers Telephone Number:  "
+    read telephone
+  done
+
+
+echo "======================================="
+echo " Customer Details"
+echo "======================================="
+# Outputs details entered and asks to add values entered into Customer Details
+echo "Should these values be entered to the Customer Details?"
+echo -e "\n $email \n $name \n $alias \n $address \n $telephone"
+echo -n "y/n: "
+read answer
+
+# Fixes case answer on y/n
+fixanswer=`echo $answer | tr "A-Z" "a-z"`;
+
+# If y was entered the values are passed to Customer details
+if [ "$fixanswer" = "y" ]
+  then 
+    echo "$email	$name	$alias	$address	$telephone" >> CustDetails
+    echo "Entry added to Customer Details"
+    sleep 4 #pauses to give user a chance to read output
+
+# If n was entered the values are discarded
+  else [ "$fixanswer" = "n" ]
+    echo "Entry not added to Customer Details"
+    sleep 4 #pauses to give user a chance to read output
+fi
+clear
+#Exits to main menu
+exit
+
+
+

@@ -1,0 +1,66 @@
+#!/bin/bash
+# Author: Niall Coady
+# Date: Wed April 26th 2017
+# Description: This script allows the user to search
+# for a cutomer based on their email, name, alias and address.
+
+# Clears the screen of the Main Menu
+clear
+echo "The Search Menu is loading...."
+sleep 2
+clear
+exit=0
+# Controls the Search Menu loop until the user hits 0 to exit.
+while [ $exit -ne 1 ]
+  do
+    # Menu options the user will see
+    echo "======================================="
+    echo " Search Menu, please choose an option!"
+    echo "======================================="
+    echo "1. Search by E-mail"
+    echo "2. Search by Name"
+    echo "3. Search by Alias"
+    echo "4. Search by Address"
+    echo "0. Exit to Main Menu"
+    echo -e "\n"
+    echo -e "Enter a Number: \c"
+    read number
+      case "$number" in
+           # Searches for a customer by their email address.
+        1) echo "Please enter the E-mail address you wish to search for?"
+           read email
+           # Searches emails for a match and prints out all the customers details.
+           awk -v email="$email" 'BEGIN {FS="\t"} $1 ~ email' CustDetails | awk '{print $0}' 
+           ;;
+           # Searches for a customer by their name.
+        2) echo "Please enter the name you wish to search for?"
+           read name
+           # Searches names for a match and prints out all the customers details.
+           awk -v name="$name" 'BEGIN {FS="\t"} $2 ~ name' CustDetails | awk '{print $0}'
+           grep -i "$name" CustDetails
+           ;;
+           # Searhces for a customer by their alias.
+        3) echo "Please enter the alias you wish to search for?"
+           read alias
+           # Searches alias for a match and prints out all the customers details.
+           awk -v alias="$alias" 'BEGIN {FS="\t"} $3 ~ alias' CustDetails | awk '{print $0}'
+           ;;
+           # Searches for a customer by their address.
+        4) echo "Please enter the address you wish to search for?"
+           read address
+           # Searches address for a match and prints out all the customers details.
+           awk -v address="$address" 'BEGIN {FS="\t"} $4 ~ address' CustDetails | awk '{print $0}'
+           ;;
+           # When user enters 0 this menu exits to the Main Menu.
+        0) echo "Exiting to Main Menu...."
+           sleep 2
+           clear
+           exit
+           ;;
+           # Catch for an invalid option entered.
+        *) echo "Invalid option, please choose again!"
+           sleep 2
+           clear
+           ;;
+      esac
+    done

@@ -1,0 +1,59 @@
+#!/bin/bash
+# Author: Niall Coady
+# Date: Wed April 26th 2017
+# Description: This script controls the Main Menu of the program.
+
+# Clears the screen
+clear
+# Welcomes user and asks for their name
+echo "Welcome, please enter your name: "
+read name
+clear 
+echo "Welcome $name. The menu is loading....."
+sleep 2
+clear # Clears the screen and loads up the main menu
+exit=0
+# Controls the menu loop until user hits 0 to exit the menu
+while [ $exit -ne 1 ] 
+  do
+    # Menu options that the user will see
+    echo "======================================="
+    echo " Main Menu, please choose an option!"
+    echo "======================================="
+    echo "1. Add a new customer"
+    echo "2. Remove a existing customer"
+    echo "3. Search for a customer"
+    echo "4. E-mail a customer"
+    echo "0. Exit"
+    echo -e "\n"
+    echo -e "Enter a number: \c"
+    read number
+      case "$number" in
+        1) ./AddCust # Runs the AddCust file and brings user to the add customer menu
+           ;;
+        2) ./RmCust # Runs the RmCust file and brings user to the remove customer menu
+           ;;
+        3) ./FindCust # Runs the FindCust file and brings user to search customer menu
+           ;;
+           # Searches emails for a match and prints out the email and name of customer.
+        4) echo "Please enter the E-mail address you wish to search for?"
+           read email
+           awk -v email="$email" 'BEGIN {FS="\t"} $1 ~ email' CustDetails | awk '{print $1, $2}'
+           mail   
+           echo "email sent"
+           sleep 2
+           clear
+           ;;
+        0) echo "Exiting...." # Exits the menu and ends the program
+           sleep 2
+           clear
+           exit
+           ;;
+           # Catch for an invalid option enetered, asks user to try again
+        *) echo "Invalid option. Please choose again!"
+           sleep 2
+           clear
+           ;;
+     esac
+  done
+
